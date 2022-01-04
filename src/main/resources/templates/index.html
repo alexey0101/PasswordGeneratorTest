@@ -109,7 +109,7 @@
         var digit = document.getElementById("digit").value;
         var special = document.getElementById("special").value;
 
-        var apiUrl = "/api/v1/password/generate?lower=" + lowercase + "&upper=" + uppercase + "&digit=" + digit + "&special=" + special;
+        var apiUrl = "/dev/api/v1/password/generate?lower=" + lowercase + "&upper=" + uppercase + "&digit=" + digit + "&special=" + special;
 
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
