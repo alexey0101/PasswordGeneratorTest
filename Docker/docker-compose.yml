@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        url: https://github.com/alexey0101/PasswordGenerator.git
+        url: https://github.com/alexey0101/PasswordGeneratorTest.git
     ports:
       - "8080:8080"
     environment:
