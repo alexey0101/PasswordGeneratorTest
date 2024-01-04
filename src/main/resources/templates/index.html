@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #ffffff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #generatedPasswordContainer {
+            display: flex;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        #generatedPassword {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+
+        #copyButton {
+            background-color: #2196F3;
+            color: #ffffff;
+            border: none;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #copyButton:hover {
+            background-color: #0b7dda;
+        }
+    </style>
+</head>
+<body>
+<form id="passwordForm">
+    <h1>Password Generator</h1>
+
+    <label for="lowercase">Lowercase Count:</label>
+    <input type="number" id="lowercase" name="lowercase" min="0" value="8" required>
+
+    <label for="uppercase">Uppercase Count:</label>
+    <input type="number" id="uppercase" name="uppercase" min="0" value="4" required>
+
+    <label for="digit">Digit Count:</label>
+    <input type="number" id="digit" name="digit" min="0" value="2" required>
+
+    <label for="special">Special Count:</label>
+    <input type="number" id="special" name="special" min="0" value="2" required>
+
+    <button type="button" onclick="generatePassword()">Generate Password</button>
+
+    <div id="generatedPasswordContainer">
+        <input id="generatedPassword" readonly>
+        <button id="copyButton" type="button" onclick="copyToClipboard()">Copy</button>
+    </div>
+</form>
+
+<script>
+    function generatePassword() {
+        var lowercase = document.getElementById("lowercase").value;
+        var uppercase = document.getElementById("uppercase").value;
+        var digit = document.getElementById("digit").value;
+        var special = document.getElementById("special").value;
+
+        var apiUrl = "/api/v1/password/generate?lower=" + lowercase + "&upper=" + uppercase + "&digit=" + digit + "&special=" + special;
+
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                var jsonResponse = JSON.parse(xhr.responseText);
+                var generatedPasswordField = document.getElementById("generatedPassword");
+                if (xhr.status == 200) {
+                    generatedPasswordField.value = jsonResponse.password;
+                } else {
+                    generatedPasswordField.value = jsonResponse.error;
+                }
+            }
+        };
+        xhr.open("GET", apiUrl, true);
+        xhr.send();
+    }
+
+    function copyToClipboard() {
+        var generatedPasswordField = document.getElementById("generatedPassword");
+        generatedPasswordField.select();
+        document.execCommand('copy');
+    }
+</script>
+</body>
+</html>
